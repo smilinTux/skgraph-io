@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKGraph — Sovereign Knowledge Graphs</title>
+    <meta name="description" content="Connect everything. Understand anything. Knowledge graph infrastructure for AI agents with relationship mapping and natural language queries.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="SKGraph — Sovereign Knowledge Graphs">
+    <meta property="og:description" content="Connect everything. Understand anything. Knowledge graph infrastructure for AI agents with relationship mapping and natural language queries.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skgraph.io">
+    <meta property="og:site_name" content="SKWorld">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SKGraph — Sovereign Knowledge Graphs">
+    <meta name="twitter:description" content="Connect everything. Understand anything. Knowledge graph infrastructure for AI agents with relationship mapping and natural language queries.">
+    <!-- Favicon & Canonical -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%95%B8%EF%B8%8F</text></svg>">
+    <link rel="canonical" href="https://skgraph.io">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e8e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Background glows */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.12;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glow-1 { background: #b388ff; top: -200px; left: -100px; }
+        .glow-2 { background: #ff4081; bottom: -200px; right: -100px; }
+        .glow-3 { background: #b388ff; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.06; }
+        /* Sticky nav */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        nav .brand {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #e8e8f0;
+            text-decoration: none;
+        }
+        nav .brand span {
+            background: linear-gradient(135deg, #b388ff, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        nav .links a {
+            color: #a0a0b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 1.5rem;
+            transition: color 0.2s;
+        }
+        nav .links a:hover { color: #b388ff; }
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(179, 136, 255, 0.1);
+            border: 1px solid rgba(179, 136, 255, 0.25);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #b388ff;
+            margin-bottom: 2rem;
+        }
+        .logo { font-size: 4rem; margin-bottom: 0.5rem; }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b388ff, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #c8c8e0;
+            margin-bottom: 0.75rem;
+        }
+        .subtitle {
+            font-size: 1.15rem;
+            color: #a0a0b8;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            max-width: 650px;
+        }
+        /* Feature cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+            max-width: 900px;
+            width: 100%;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        .feature:hover {
+            border-color: rgba(179, 136, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(179, 136, 255, 0.08);
+        }
+        .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .feature h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #c8c8e0; }
+        .feature p { font-size: 0.85rem; color: #808098; line-height: 1.5; }
+        /* CTA */
+        .cta {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #b388ff, #ff4081);
+            color: #0a0a0a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .cta:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(179, 136, 255, 0.3); }
+        /* Tech stack */
+        .stack {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #606078;
+        }
+        .stack span {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            margin: 0.25rem;
+            font-size: 0.8rem;
+        }
+        /* Ecosystem footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            color: #505068;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .eco-links { margin-bottom: 1rem; }
+        .eco-links a {
+            color: #87CEEB;
+            text-decoration: none;
+            margin: 0 0.8rem;
+            white-space: nowrap;
+        }
+        .eco-links a:hover { color: #b388ff; }
+        footer p a { color: #b388ff; text-decoration: none; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .tagline { font-size: 1.2rem; }
+            .subtitle { font-size: 1rem; }
+            .features { grid-template-columns: 1fr; gap: 1rem; }
+            nav { padding: 0.75rem 1rem; }
+            nav .links a { margin-left: 0.75rem; font-size: 0.8rem; }
+            main { padding: 3rem 1.25rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <nav>
+        <a href="https://skgraph.io" class="brand"><span>SK</span>Graph</a>
+        <div class="links">
+            <a href="https://skcapstone.io">SKCapstone</a>
+            <a href="https://skworld.io">SKWorld</a>
+            <a href="https://github.com/smilinTux/skgraph">GitHub</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="badge">Coming Soon -- Building in Public</div>
+        <div class="logo">&#x1F578;&#xFE0F;</div>
+        <h1>SKGraph</h1>
+        <p class="tagline">Connect Everything. Understand Anything.</p>
+        <p class="subtitle">
+            Knowledge graph infrastructure for sovereign AI agents.<br>
+            Relationship mapping, entity linking, and graph queries<br>
+            for data that thinks in connections, not tables.
+        </p>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">&#x1F5C4;&#xFE0F;</div>
+                <h3>FalkorDB Backend</h3>
+                <p>Powered by FalkorDB for blazing-fast graph queries. Optimized for AI-scale relationship traversal.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#x1F517;</div>
+                <h3>Entity-Relationship Mapping</h3>
+                <p>Automatically discover and link entities across your sovereign data. Build knowledge webs, not silos.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#x1F4AC;</div>
+                <h3>Natural Language Queries</h3>
+                <p>Ask questions in plain English. SKGraph translates to graph queries and returns structured answers.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#x1F9E0;</div>
+                <h3>Graph-Based Memory</h3>
+                <p>Memories as interconnected nodes. Recall by relationship, not just keyword. Context-aware retrieval.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#x1F916;</div>
+                <h3>AI-Native Traversal</h3>
+                <p>Graph algorithms designed for agent reasoning. Path-finding, centrality, and pattern matching built in.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">&#x1F9E9;</div>
+                <h3>Integrates with SKMemory</h3>
+                <p>Seamless bridge between SKMemory and graph storage. Memories gain structure. Graphs gain history.</p>
+            </div>
+        </div>
+
+        <a href="https://github.com/smilinTux/skgraph" class="cta">View on GitHub &#x2192;</a>
+
+        <div class="stack">
+            <span>FalkorDB</span>
+            <span>Cypher</span>
+            <span>Knowledge Graphs</span>
+            <span>SKMemory</span>
+            <span>SKCapstone</span>
+            <span>Python</span>
+            <span>GPL-3.0</span>
+        </div>
+    </main>
+
+    <footer>
+        <div class="eco-links">
+            <a href="https://skcapstone.io">&#x1F3DB;&#xFE0F; SKCapstone</a>
+            <a href="https://capauth.io">&#x1F510; CapAuth</a>
+            <a href="https://skchat.io">&#x1F4AC; SKChat</a>
+            <a href="https://skcomm.io">&#x1F4E1; SKComm</a>
+            <a href="https://skmemory.io">&#x1F9E0; SKMemory</a>
+            <a href="https://skdata.io">&#x1F5C4;&#xFE0F; SKData</a>
+            <a href="https://skvector.io">&#x1F50D; SKVector</a>
+            <a href="https://sksecurity.io">&#x1F6E1;&#xFE0F; SKSecurity</a>
+            <a href="https://skworld.io">&#x1F30D; SKWorld</a>
+        </div>
+        <p>&copy; 2026 <a href="https://github.com/smilinTux">smilinTux</a> &middot; GPL-3.0 License</p>
+        <p style="margin-top: 0.5rem; color: #404058;">Sovereign knowledge for sovereign agents &#x1F427;</p>
+    </footer>
+</body>
+</html>
